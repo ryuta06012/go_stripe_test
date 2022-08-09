@@ -7,14 +7,20 @@ import (
   "log"
   "net/http"
   "fmt"
+  "os"
 
   "github.com/stripe/stripe-go/v72"
   "github.com/stripe/stripe-go/v72/paymentintent"
+  "github.com/joho/godotenv"
 )
 
 func main() {
+  err := godotenv.Load(".env")
+  if err != nil {
+		fmt.Printf("読み込み出来ませんでした: %v", err)
+	} 
   // This is your test secret API key.
-  stripe.Key = "sk_test_51LTisvG3SC5GJqbpdfprgYCIzyDKoKKTbyXrjRfXcDzCLebr4BdBVPRZbM8xCZLBDJPCAAT1IKmSGznWdJqK5cGM00Y4yRMSph"
+  stripe.Key = os.Getenv("SECRETKEY")
 
   fs := http.FileServer(http.Dir("public"))
   http.Handle("/", fs)
